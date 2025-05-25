@@ -52,6 +52,6 @@ if submit:
     st.success(f"**Suggested Batting Style: {style}**")
 
     st.image(bat_images.get(style, ""), caption=f"{style} Bat Preview", use_container_width=True)
-    st.info(bat_descriptions.get(style, ""))s
+    st.info(bat_descriptions.get(style, ""))
 
     st.markdown(f"[Order Recommended Bat]({bat_links.get(style, '#')})", unsafe_allow_html=True)
