@@ -69,7 +69,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Sidebar (optional) ---
-st.sidebar.image("https://yourdomain.com/logo.png", use_column_width=True)
+st.sidebar.image("https://yourdomain.com/logo.png", use_container_width=True)
 st.sidebar.title("🏏 Cricket Gear AI")
 st.sidebar.markdown("Get your **perfect bat** based on your play style and height.")
 
