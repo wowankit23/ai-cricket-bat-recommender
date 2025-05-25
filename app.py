@@ -1,6 +1,6 @@
 import streamlit as st
 
-# --- Bat Image URLs (Update with actual image links or use local images if hosting) ---
+# Bat image URLs
 bat_images = {
     "Defensive": "https://yourdomain.com/images/bat_defensive.jpg",
     "Aggressive": "https://yourdomain.com/images/bat_aggressive.jpg",
@@ -19,21 +19,21 @@ bat_links = {
     "All-Rounder": "https://yourshop.com/product/allrounder-bat"
 }
 
-# --- Bat Size Data ---
+# Bat Size Data (updated to include height in feet)
 bat_sizes = [
-    {"Size": "0", "Length (in)": "24-27", "Height (cm)": "61-68.5", "Player Height (cm)": "Below 122", "Age": "3-4 years"},
-    {"Size": "1", "Length (in)": "27-28", "Height (cm)": "68.5-71", "Player Height (cm)": "122-129", "Age": "4-5 years"},
-    {"Size": "2", "Length (in)": "29-30", "Height (cm)": "73.5-76", "Player Height (cm)": "130-136", "Age": "6-7 years"},
-    {"Size": "3", "Length (in)": "30-31", "Height (cm)": "76-78.5", "Player Height (cm)": "137-144", "Age": "8-9 years"},
-    {"Size": "4", "Length (in)": "31-32", "Height (cm)": "78.5-81", "Player Height (cm)": "145-151", "Age": "9-10 years"},
-    {"Size": "5", "Length (in)": "32-33", "Height (cm)": "81-84", "Player Height (cm)": "152-159", "Age": "10-11 years"},
-    {"Size": "6", "Length (in)": "33-34", "Height (cm)": "84-86.5", "Player Height (cm)": "160-164", "Age": "11-12 years"},
-    {"Size": "Harrow", "Length (in)": "32-33", "Height (cm)": "81-84", "Player Height (cm)": "165-169", "Age": "12-14 years"},
-    {"Size": "Short Handle", "Length (in)": "32-33.5", "Height (cm)": "81-85", "Player Height (cm)": "170-182", "Age": "15+ years"},
-    {"Size": "Long Handle", "Length (in)": "33.5-34.5", "Height (cm)": "85-87.5", "Player Height (cm)": "183+", "Age": "15+ years"},
+    {"Size": "0", "Length (in)": "24-27", "Player Height (cm)": "Below 122", "Player Height (ft)": "Below 4'", "Age": "3-4 years"},
+    {"Size": "1", "Length (in)": "27-28", "Player Height (cm)": "122-129", "Player Height (ft)": "4'0\" - 4'2\"", "Age": "4-5 years"},
+    {"Size": "2", "Length (in)": "29-30", "Player Height (cm)": "130-136", "Player Height (ft)": "4'3\" - 4'5\"", "Age": "6-7 years"},
+    {"Size": "3", "Length (in)": "30-31", "Player Height (cm)": "137-144", "Player Height (ft)": "4'6\" - 4'8\"", "Age": "8-9 years"},
+    {"Size": "4", "Length (in)": "31-32", "Player Height (cm)": "145-151", "Player Height (ft)": "4'9\" - 4'11\"", "Age": "9-10 years"},
+    {"Size": "5", "Length (in)": "32-33", "Player Height (cm)": "152-159", "Player Height (ft)": "5'0\" - 5'2\"", "Age": "10-11 years"},
+    {"Size": "6", "Length (in)": "33-34", "Player Height (cm)": "160-164", "Player Height (ft)": "5'3\" - 5'4\"", "Age": "11-12 years"},
+    {"Size": "Harrow", "Length (in)": "32-33", "Player Height (cm)": "165-169", "Player Height (ft)": "5'5\" - 5'6\"", "Age": "12-14 years"},
+    {"Size": "Short Handle", "Length (in)": "32-33.5", "Player Height (cm)": "170-182", "Player Height (ft)": "5'7\" - 5'11\"", "Age": "15+ years"},
+    {"Size": "Long Handle", "Length (in)": "33.5-34.5", "Player Height (cm)": "183+", "Player Height (ft)": "6'0\"+", "Age": "15+ years"},
 ]
 
-# --- Suggest Batting Style ---
+# Batting style logic
 def suggest_batting_style(age_group, experience, build, preferred_shots, match_format, batting_position):
     experience = experience.lower()
     build = build.lower()
@@ -50,7 +50,7 @@ def suggest_batting_style(age_group, experience, build, preferred_shots, match_f
         return "All-Rounder"
     return "All-Rounder"
 
-# --- Suggest Bat Size ---
+# Bat size suggestion based on cm
 def suggest_bat_size(height_cm):
     for size in bat_sizes:
         height_range = size["Player Height (cm)"]
@@ -68,7 +68,7 @@ def suggest_bat_size(height_cm):
                 return size["Size"]
     return "Unknown"
 
-# --- Streamlit UI ---
+# Streamlit UI
 st.set_page_config(page_title="AI Bat Style & Size Recommender", layout="centered")
 st.title("🏏 AI-Powered Cricket Bat Recommender")
 
@@ -80,16 +80,21 @@ with st.form("profile_form"):
     preferred_shots = st.selectbox("Preferred Shots", ["Front foot", "Back foot", "Both"], help="Choose the type of shots you play most confidently.")
     match_format = st.selectbox("Match Format", ["Test", "ODI", "T20"])
     batting_position = st.selectbox("Batting Position", ["Opener", "Middle order", "Lower order"])
-    player_height_cm = st.number_input("Player Height (in cm)", min_value=50, max_value=220, step=1)
+    
+    st.markdown("### Player Height")
+    height_ft = st.number_input("Feet", min_value=3, max_value=8, step=1)
+    height_in = st.number_input("Inches", min_value=0, max_value=11, step=1)
+    height_cm = round((height_ft * 30.48) + (height_in * 2.54), 1)
 
     submit = st.form_submit_button("Suggest Bat & Size")
 
 if submit:
     style = suggest_batting_style(age_group, experience, build, preferred_shots, match_format, batting_position)
-    bat_size = suggest_bat_size(player_height_cm)
+    bat_size = suggest_bat_size(height_cm)
 
     st.success(f"**Suggested Batting Style:** {style}")
     st.success(f"**Recommended Bat Size:** {bat_size}")
+    st.info(f"📏 Player Height: {height_ft}′{height_in}″ ({height_cm} cm)")
 
     image_url = bat_images.get(style)
     if image_url:
