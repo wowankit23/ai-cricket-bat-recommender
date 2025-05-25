@@ -51,7 +51,7 @@ if submit:
     style = suggest_batting_style(age_group, experience, build, preferred_shots, match_format, batting_position)
     st.success(f"**Suggested Batting Style: {style}**")
 
-    st.image(bat_images.get(style, ""), caption=f"{style} Bat Preview", use_column_width=True)
-    st.info(bat_descriptions.get(style, ""))
+    st.image(bat_images.get(style, ""), caption=f"{style} Bat Preview", use_container_width=True)
+    st.info(bat_descriptions.get(style, ""))s
 
     st.markdown(f"[Order Recommended Bat]({bat_links.get(style, '#')})", unsafe_allow_html=True)
